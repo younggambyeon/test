@@ -1,0 +1,16 @@
+.navbar-mid {
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.ani_office {
+    position: absolute;
+    z-index: 3;
+    animation-name: ani_office;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-delay: 0s;
+    opacity: 1;
+    padding-left: 40px;
+    margin-left: 220px;
+}

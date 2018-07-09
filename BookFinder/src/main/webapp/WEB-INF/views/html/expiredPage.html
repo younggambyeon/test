@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>SmartOffice</title>
+
+<link rel="stylesheet"
+	th:href="@{/design/bootstrap/css/bootstrap.min.css}" />
+<link rel="stylesheet"
+	th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css}" />
+<link rel="stylesheet" th:href="@{/design/css/demo.css}" />
+<link rel="stylesheet" th:href="@{/design/css/common.css}" />
+<link rel="stylesheet" th:href="@{/design/css/style.css}" />
+
+</head>
+<body>
+	<div id="container"
+		style="height: 100vh; position: relative; background: #20b1ed">
+		<div class="col-md-7 C"
+			style="float: none; margin: 0 auto; padding: 220px 50px; position: absolute; top: 0; bottom: 0; left: 0; right: 0; text-align: left;">
+			<div style="max-width: 500px !important;">
+				<span th:if="${msg != null}"
+					style="font-size: 40px; color: #fff; line-height: 50px; word-break: keep-all;"
+					th:text="${msg}"></span> <span th:if="${msg == null}"
+					style="font-size: 40px; color: #fff; line-height: 50px; word-break: keep-all;">이
+					페이지를 표시할 수 없습니다.</span>
+			</div>
+
+			<div style="max-width: 350px !important; margin-top: 20px;">
+				<span class="fs14"
+					style="color: #fff; font-size: 16px; line-height: 26px; word-break: keep-all;">접근하려는
+					웹 페이지는 존재하지 않거나 잘못된 요청으로 접근할 수 없습니다. 다시 시도하거나 <a th:href="@{/home}"
+					style="color: #ffffff; text-decoration: underline; font-size: 18px;">home</a>
+					으로 이동하세요.
+				</span>
+			</div>
+
+		</div>
+	</div>
+	<!-- js placed at the end of the document so the pages load faster -->
+	<script th:src="@{/design/js/jquery-2.2.3.min.js}"></script>
+	<script th:src="@{/design/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
