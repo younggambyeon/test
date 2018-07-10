@@ -13,43 +13,72 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
-
 	<util:properties id="config"
 		location="classpath:config/config.properties" />
 
 	<!-- DataSource -->
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-
 		<property name="driverClassName" value="#{config['database.driverClass']}" />
 		<property name="url" value="#{config['database.url']}" />
 		<property name="username" value="#{config['database.username']}" />
 		<property name="password" value="#{config['database.password']}" />
+		<property name="maxWaitMillis" value="6000"></property>
+		<property name="validationQuery" value="select 1"></property>
 	</bean>
 
+	<!-- entityManagerFactory -->
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
 		</property>
 		<property name="dataSource" ref="dataSource" />
+
 		<property name="jpaProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
-				<prop key="hibernate.default_schema">test</prop>
+				<prop key="hibernate.default_schema">book_finder</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 				<prop key="hibernate.connection.pool_size">4</prop>
 				<prop key="hibernate.connection.shutdown">true</prop>
 				<prop key="hibernate.show_sql">true</prop>
+
+				<!-- create / update -->
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 			</props>
 		</property>
 
-		<property name="packagesToScan" value="com.younggmabyeon.test" />
+		<property name="packagesToScan" value="com.younggambyeon.test.dto" />
 
 	</bean>
 
+	<jpa:repositories base-package="com.younggambyeon.test.repository"></jpa:repositories>
+
+	<!-- transactionManager -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory"></property>
 	</bean>
 
+	<tx:advice id="testAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="insert*" rollback-for="DataAccessException" />
+			<tx:method name="save*" rollback-for="DataAccessException" />
+			<tx:method name="update*" rollback-for="DataAccessException" />
+			<tx:method name="delete*" rollback-for="DataAccessException" />
+			<tx:method name="select*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="required"
+			expression="execution(* com.younggambyeon.test..*ServiceImpl.*(..))" />
+
+		<aop:advisor advice-ref="testAdvice" pointcut-ref="required" />
+	</aop:config>
+
+	<tx:annotation-driven />
+
+	<!-- beans -->
+	<bean id="userService" class="com.younggambyeon.test.service.UserServiceImpl"></bean>
+	<bean id="userDao" class="com.younggambyeon.test.dao.UserDaoImpl"></bean>
 
 </beans>

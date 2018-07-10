@@ -20,19 +20,15 @@ public class BookFinderServiceImpl implements BookFinderService {
 		if (sort != null && !"".equals(sort)) {
 			builder.queryParam("sort", sort);
 		}
-
 		if (target != null && !"".equals(target)) {
 			builder.queryParam("target", target);
 		}
-
 		if (page > 0) {
 			builder.queryParam("page", page);
 		}
-
 		if (size > 9) {
 			builder.queryParam("size", size);
 		}
-
 		if (category > -1) {
 			builder.queryParam("category", category);
 		}

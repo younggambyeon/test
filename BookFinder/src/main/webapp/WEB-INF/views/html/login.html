@@ -2,85 +2,82 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 
-<title>Book-Finder</title>
-
-<link rel="stylesheet"
-	th:href="@{/design/bootstrap/css/bootstrap.min.css}" />
-<link rel="stylesheet"
-	th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css}" />
-<link rel="stylesheet" th:href="@{/design/css/demo.css}" />
-<link rel="stylesheet" th:href="@{/design/css/common.css}" />
+<!-- css -->
+<link rel="stylesheet" th:href="@{/design/css/bootstrap.min.css}" />
 <link rel="stylesheet" th:href="@{/design/css/style.css}" />
 <link rel="stylesheet" media="(min-width: 320px) and (max-width: 480px)"
 	th:href="@{/design/css/style_mobile.css}" />
+<link rel="stylesheet" th:href="@{/design/css/common.css}" />
 
+<!-- google font api -->
+<link
+	href="https://fonts.googleapis.com/css?family=Dosis|Ubuntu+Condensed"
+	rel="stylesheet" />
+<link href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css"
+	rel="stylesheet" />
+
+<!-- fontawesome icon -->
+<link rel="stylesheet"
+	th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css}" />
+
+<script th:src="@{/design/js/jquery-2.2.3.min.js}"></script>
+<script th:src="@{https://code.jquery.com/ui/1.11.4/jquery-ui.min.js}"></script>
+<script>
+	$.widget.bridge('uibutton', $.ui.button);
+</script>
+<script th:src="@{/design/js/bootstrap.min.js}"></script>
+
+<title>login</title>
 </head>
 <body>
 	<div id="container"
-		style="position: relative; background: #fff; min-height: 820px;">
-		<div class="login">
-			<div class="col-md-12 center login__wrap">
-
-				<a class="logo" th:href="@{/login}"> <span
-					class="logo-lg fs25 ft_white"> <b class="fs25">Book</b>-Finder
-				</span>
-				</a>
-
-				<div id="output__text" class="p20" style="visibility: visible;">
-					<span class="bold" th:text="${loginError}"></span>
+		style="height: 100vh; position: relative; background: #5C8EFC;">
+		<form th:action="@{/process}" method="POST">
+			<div class="col-md-3 box_login">
+				<div class="login_title">
+					<span class="tada animated block"> <i class="fa fa-smile-o"
+						aria-hidden="true"></i>&nbsp;Welcome
+					</span>
 				</div>
 
-				<form th:action="@{/process}" method="POST" id="login_form">
-					<div class="col-md-12 login__form">
+				<div class="login_box">
+					<div class="p50">
+						<input type="text" name="username"
+							class="input_id form-control mgt30" placeholder="e-mail" /><br />
+						<input type="password" name="password"
+							class="input_pw form-control" placeholder="password" />
 
-						<div class="col-md-12">
-							<input class="login__input" type="text" name="username"
-								placeholder="아이디(이메일)" autocomplete="off"
-								style="background-color: rgb(255, 255, 255);" />
+						<div class="col-md-12 L" style="padding: 10px 0px 5px 0px;">
+							<div class="login__checkbox--iskeep" style="width: 100%;">
+								<input type="checkbox" id="login__checkbox--iskeep"
+									name="remember_me" /> <label for="login__checkbox--iskeep">
+								</label> <span class="remember__span">remember me</span>
+							</div>
 						</div>
 
-						<div class="col-md-12">
-							<input class="login__input" type="password" name="password"
-								placeholder="비밀번호" />
+						<div class="col-md-12 R pr10">
+							<a th:href="@{/join}"> <span
+								style="color: #5b8efd; font-weight: bold; cursor: pointer;">SIGN
+									UP</span>
+							</a>
 						</div>
 
-						<div class="col-md-12"
-							style="position: absolute; bottom: -20px; left: 0; right: 0;">
-							<button class="login__button" id="login_button">로그인</button>
+						<div style="display: inline-block; padding: 5px 0px;">
+							<span class="ft_emph" th:text="${loginError}">&nbsp;</span>
 						</div>
+
+						<button class="btn btn-block btn_login" type="submit">Login</button>
+
 					</div>
-
-					<div class="col-md-12 R mgt15 mgb50 p03">
-						<div class="login__checkbox--iskeep" style="width: 100%;">
-							<input type="checkbox" id="login__checkbox--iskeep"
-								name="remember_me" /> <label for="login__checkbox--iskeep">
-							</label> <span class="ft_white">로그인 유지</span>
-						</div>
-
-					</div>
-				</form>
-
-				<div class="col-md-12 login__others">
-					<a th:href="@{/join}">회원가입</a> <a
-						th:href="@{/account/password/reset/email}"> 비밀번호
-						찾기&nbsp;&nbsp;&nbsp;&nbsp;</a>&nbsp;&nbsp;&nbsp;
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
-	<!-- jquery -->
-	<script th:src="@{/design/js/jquery-2.2.3.min.js}"></script>
-	<script th:src="@{/design/bootstrap/js/bootstrap.min.js}"></script>
-
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$("#login_button").click(function(e) {
-				$("#login_form").submit();
-			});
-		});
-	</script>
 </body>
 </html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- External CSS -->
+<link rel="stylesheet" th:href="@{/design/css/bootstrap.css}" />
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" />
+<link rel="stylesheet"
+	th:href="@{https://fonts.googleapis.com/earlyaccess/nanumgothic.css}" />
+
+<!-- Custom CSS -->
+<link rel="stylesheet" th:href="@{/design/css/style.css}" />
+<link rel="stylesheet" media="(min-width: 320px) and (max-width: 994px)"
+	th:href="@{/design/css/style_mobile.css}" />
+<link rel="stylesheet" th:href="@{/design/css/common.css}" />
+<link rel="stylesheet" th:href="@{/design/css/style-responsive.css}" />
+
+<!-- JQuery -->
+<script th:src="@{/design/js/jquery-2.2.3.min.js}"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script>
+	$.widget.bridge('uibutton', $.ui.button);
+</script>
+
+<script th:src="@{/design/js/bootstrap.min.js}"></script>
+<script
+	src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
+
+<script th:src="@{/custom/js/common.js}" charset="utf-8"></script>
+<script th:src="@{/custom/js/handler.js}" charset="utf-8"></script>
+<script th:src="@{/custom/js/user.js}" charset="utf-8"></script>
+<script th:src="@{/custom/js/admin.js}" charset="utf-8"></script>
+<title>console</title>
+</head>
+<body>
+<body>
+	<section id="container">
+		<!-- start header -->
+		<header class="header black-bg">
+			<a class="logo" th:href="@{/console}"><b>BOOK-FINDER</b></a>
+
+			<div class="top-menu">
+				<ul class="nav pull-right top-menu">
+					<li>
+						<p class="nav--username">
+							<a th:href="@{/console/authentication/password}"> <i
+								class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp; <th:block
+									th:text="${user.email}"></th:block>
+							</a>
+						</p>
+					</li>
+					<li><a class="logout" th:href="@{/logout}">Logout</a></li>
+				</ul>
+			</div>
+		</header>
+		<!-- end header -->
+
+
+		<!--main content start-->
+		<section id="main-content">
+			<section class="wrapper">
+				<div class="row mgb20">
+					<div class="col-md-12 p10 key__wrapper">
+
+						<div class="col-md-12 p0 mgt50">
+							<div class="col-md-6 p0">
+								<input type="text" class="form-control input_key"
+									placeholder="Key" id="authKey" th:value="${authKey}" />
+								<button class="btn btn_copy copy-text" data-toggle="tooltip"
+									data-clipboard-target="#authKey" type="button"
+									data-original-title="Copy to Clipboard">
+									<i class="fa fa-clipboard"></i>
+								</button>
+							</div>
+
+							<div class="col-md-1 p0">
+								<button class="btn btn-block key_reissue" id="refresh_button">
+									<i class="fa fa-refresh"></i>&nbsp; <span>키 재발급</span>
+								</button>
+							</div>
+						</div>
+						<input type="hidden" id="authenticationIdx" th:value="${idx}" />
+					</div>
+
+					
+				</div>
+			</section>
+		</section>
+		<!--main content end-->
+
+		<!--footer start-->
+		<footer class="site-footer">
+			<div class="text-center">2018-BOOK-FINDER</div>
+		</footer>
+		<!--footer end-->
+	</section>
+</body>
+</body>
+<script th:src="@{/design/js/jquery.dcjqaccordion.2.7.js}"
+	type="text/javascript" class="include"></script>
+<script th:src="@{/design/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{/design/js/jquery.nicescroll.js}"
+	type="text/javascript"></script>
+<script th:src="@{/design/js/common-scripts.js}"></script>
+<script>
+	$("body").tooltip({
+		selector : '[data-toggle=tooltip]'
+	});
+
+	$(function() {
+		new Clipboard('.copy-text');
+	});
+</script>
+</html>
