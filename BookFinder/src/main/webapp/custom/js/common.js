@@ -19,7 +19,7 @@ function isPassword(password) {
 	} else {
 		return regex.test(password);
 	}
-}
+};
 
 function isEmail(email) {
 	var regex = /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -29,4 +29,4 @@ function isEmail(email) {
 	} else {
 		return regex.test(email);
 	}
-}
+};

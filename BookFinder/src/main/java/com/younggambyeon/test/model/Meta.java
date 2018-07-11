@@ -5,13 +5,13 @@ public class Meta {
 	private Integer total_count;
 	private Integer pageable_count;
 
-	private boolean is_end;
+	private String is_end;
 
 	public Meta() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Meta(Integer total_count, Integer pageable_count, boolean is_end) {
+	public Meta(Integer total_count, Integer pageable_count, String is_end) {
 		this.total_count = total_count;
 		this.pageable_count = pageable_count;
 		this.is_end = is_end;
@@ -33,11 +33,11 @@ public class Meta {
 		this.pageable_count = pageable_count;
 	}
 
-	public boolean isIs_end() {
+	public String getIs_end() {
 		return is_end;
 	}
 
-	public void setIs_end(boolean is_end) {
+	public void setIs_end(String is_end) {
 		this.is_end = is_end;
 	}
 

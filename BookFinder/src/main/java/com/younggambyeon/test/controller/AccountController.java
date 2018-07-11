@@ -32,6 +32,8 @@ public class AccountController {
 
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public @ResponseBody String joinUser(@RequestBody User user) {
+		// 비밀번호 복호화
+		// 이메일, 비밀번호 확인 필요
 
 		userService.saveUser(user);
 

@@ -30,11 +30,12 @@
 <script
 	src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
 
+
 <script th:src="@{/custom/js/common.js}" charset="utf-8"></script>
 <script th:src="@{/custom/js/handler.js}" charset="utf-8"></script>
 <script th:src="@{/custom/js/user.js}" charset="utf-8"></script>
-<script th:src="@{/custom/js/admin.js}" charset="utf-8"></script>
-<title>console</title>
+<script th:src="@{/custom/js/book.js}" charset="utf-8"></script>
+<title>home</title>
 </head>
 <body>
 <body>
@@ -49,7 +50,7 @@
 						<p class="nav--username">
 							<a th:href="@{/console/authentication/password}"> <i
 								class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp; <th:block
-									th:text="${user.email}"></th:block>
+									th:text="${email}"></th:block>
 							</a>
 						</p>
 					</li>
@@ -59,6 +60,30 @@
 		</header>
 		<!-- end header -->
 
+		<header class="hd_console">
+			<div class="title_console"></div>
+			<p>책 검색</p>
+		</header>
+
+		<!--sidebar start-->
+		<aside>
+			<div id="sidebar" class="nav-collapse" tabindex="5000"
+				style="overflow: hidden; outline: none;">
+				<ul class="sidebar-menu" id="nav-accordion">
+					<li class="mgt05"><a class="active"> &nbsp;&nbsp;<i
+							class="fa  fa-book" aria-hidden="true"></i><span
+							style="font-size: 13px;">책 검색</span>
+					</a></li>
+					<li class="mgt05"><a th:href="@{/bookmark}">&nbsp;&nbsp;<i
+							class="fa fa-bookmark" aria-hidden="true"></i> <span class="fs13">
+								북마크</span>
+					</a></li>
+				</ul>
+
+			</div>
+		</aside>
+		<!--sidebar end-->
+
 
 		<!--main content start-->
 		<section id="main-content">
@@ -66,27 +91,89 @@
 				<div class="row mgb20">
 					<div class="col-md-12 p10 key__wrapper">
 
-						<div class="col-md-12 p0 mgt50">
-							<div class="col-md-6 p0">
-								<input type="text" class="form-control input_key"
-									placeholder="Key" id="authKey" th:value="${authKey}" />
+						<div class="col-md-12 p0 ">
+
+
+							<div class="col-md-3 p0">
+								<input type="text" class="form-control input_key" id="keyword"
+									th:value="${keyword}" />
+
 								<button class="btn btn_copy copy-text" data-toggle="tooltip"
-									data-clipboard-target="#authKey" type="button"
-									data-original-title="Copy to Clipboard">
-									<i class="fa fa-clipboard"></i>
+									type="button" data-original-title="Search" id="search_button">
+									<i class="fa fa-search" aria-hidden="true"></i>
 								</button>
 							</div>
 
-							<div class="col-md-1 p0">
-								<button class="btn btn-block key_reissue" id="refresh_button">
-									<i class="fa fa-refresh"></i>&nbsp; <span>키 재발급</span>
-								</button>
-							</div>
+
 						</div>
-						<input type="hidden" id="authenticationIdx" th:value="${idx}" />
 					</div>
 
-					
+					<!-- main list start -->
+					<div class="col-md-12 p50">
+						<table>
+							<colgroup>
+								<col width="1000" />
+								<col />
+							</colgroup>
+							<tbody id="book_list_box">
+
+								<tr th:each="book :${documents}">
+									<td><span class="imgBook"> <a
+											th:href="${book.thumbnail}" target="_blank"><span></span>
+												<img th:src="${book.thumbnail}" width="95" height="138"
+												style="float: left; margin-right: 20px" /> </a>
+									</span>
+
+										<dl class="cont">
+											<dt class="title" style="padding-top: 0">
+												<a th:href="${book.url}" target="_blank"><strong
+													th:text="${book.title}">곰돌이 푸, 행복한 일은 매일 있어</strong></a>
+
+												<button style="border: 0; margin-left: 5px;">
+													<i class="fa fa-bookmark-o" aria-hidden="true"></i>
+												</button>
+											</dt>
+											<dd class="info">
+												<div class="view" style="margin-bottom: 5px;">
+													<strong> <th:block
+															th:each="author : ${book.authors}">
+															<th:block th:text="${author} ">
+															</th:block>
+														</th:block>
+													</strong>
+
+												</div>
+												<div class="view">
+													<span th:text="${book.publisher}">알에이치코리아(RHK)</span> <span
+														class="fc999">펴냄</span> <span class="bar">|</span> <span
+														class="date" th:text="${book.datetime}">2018-03-12</span>
+												</div>
+												<div class="view">
+													카테고리 <span th:text="${book.category}">컴퓨터/IT</span>
+												</div>
+												<div class="view">
+													정가 <span style="text-decoration: line-through;"
+														th:text="${book.price}">12000</span>원 <strong
+														th:text="${book.sale_price}">22500</strong>원
+												</div>
+											</dd>
+											<dd style="margin-top: 5px;">
+												<span class="wrap_book_intro">책소개</span> <a
+													th:href="${book.url}" target="_blank"
+													th:text="${book.contents}">JPA(Java Persistence API)를
+													시작하려는 개발자를 위한 입문서 『JPA 프로그래밍 입문』. 엔티티, 밸류에 대한 기본 매핑부터 콜렉션
+													매핑까지 핵심 설정 설명하고 쿼리 방식 조회(JPQL...</a>
+											</dd>
+										</dl></td>
+
+								</tr>
+
+							</tbody>
+						</table>
+
+					</div>
+					<!-- main list end-->
+
 				</div>
 			</section>
 		</section>
@@ -94,10 +181,14 @@
 
 		<!--footer start-->
 		<footer class="site-footer">
-			<div class="text-center">2018-BOOK-FINDER</div>
+			<div class="text-center">2018 BOOK-FINDER</div>
 		</footer>
 		<!--footer end-->
 	</section>
+
+	<input type="hidden" th:value="${page}" id="page" />
+	<input type="hidden" th:value="${isEnd}" id="isEnd" />
+
 </body>
 </body>
 <script th:src="@{/design/js/jquery.dcjqaccordion.2.7.js}"
@@ -109,10 +200,6 @@
 <script>
 	$("body").tooltip({
 		selector : '[data-toggle=tooltip]'
-	});
-
-	$(function() {
-		new Clipboard('.copy-text');
 	});
 </script>
 </html>

@@ -11,10 +11,13 @@
 	<security:http auto-config='true' use-expressions="true">
 		<security:csrf disabled="true" />
 
-		<security:intercept-url pattern="/custom/**"
-			access="permitAll" />
-		<security:intercept-url pattern="/design/**"
-			access="permitAll" />
+		<!-- role -->
+		<security:intercept-url pattern="/home"
+			access="hasAnyRole('ROLE_USER')" />
+
+		<security:intercept-url pattern="/book/**"
+			access="hasAnyRole('ROLE_USER')" />
+
 		<security:intercept-url pattern="/login"
 			access="permitAll" />
 		<security:intercept-url pattern="/login/**"
@@ -23,12 +26,6 @@
 			access="permitAll" />
 		<security:intercept-url pattern="/join/**"
 			access="permitAll" />
-		<security:intercept-url pattern="/**" access="permitAll" />
-
-		<!-- role -->
-		<security:intercept-url pattern="/book/**"
-			access="hasAnyRole('ROLE_USER')" />
-
 
 		<security:session-management>
 			<security:concurrency-control />
