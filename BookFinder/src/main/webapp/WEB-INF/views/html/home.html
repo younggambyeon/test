@@ -50,7 +50,7 @@
 						<p class="nav--username">
 							<a th:href="@{/console/authentication/password}"> <i
 								class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp; <th:block
-									th:text="${email}"></th:block>
+									th:text="${user.email}"></th:block>
 							</a>
 						</p>
 					</li>
@@ -65,11 +65,12 @@
 			<p>책 검색</p>
 		</header>
 
-		<!--sidebar start-->
+		<!-- sidebar start-->
 		<aside>
 			<div id="sidebar" class="nav-collapse" tabindex="5000"
 				style="overflow: hidden; outline: none;">
 				<ul class="sidebar-menu" id="nav-accordion">
+
 					<li class="mgt05"><a class="active"> &nbsp;&nbsp;<i
 							class="fa  fa-book" aria-hidden="true"></i><span
 							style="font-size: 13px;">책 검색</span>
@@ -78,6 +79,11 @@
 							class="fa fa-bookmark" aria-hidden="true"></i> <span class="fs13">
 								북마크</span>
 					</a></li>
+					<li class="mgt05"><a th:href="@{/history}">&nbsp;&nbsp;<i
+							class="fa fa-history" aria-hidden="true"></i> <span class="fs13">
+								검색기록</span>
+					</a></li>
+
 				</ul>
 
 			</div>
@@ -94,16 +100,36 @@
 						<div class="col-md-12 p0 ">
 
 
-							<div class="col-md-3 p0">
-								<input type="text" class="form-control input_key" id="keyword"
-									th:value="${keyword}" />
+							<form th:action="@{/book}" id="search_form">
+								<input type="hidden" th:value="${startPage}" id="startPage"
+									name="page" /> <input type="hidden" th:value="${sort}"
+									id="sort" name="sort" />
 
-								<button class="btn btn_copy copy-text" data-toggle="tooltip"
-									type="button" data-original-title="Search" id="search_button">
-									<i class="fa fa-search" aria-hidden="true"></i>
-								</button>
-							</div>
 
+
+								<!-- sort -->
+								<div class="col-sm-2">
+									<select class="form-control" id="search_sort_select">
+										<option value="accuracy" th:selected="accuracy == ${sort}">정확도순</option>
+										<option value="recency" th:selected="recency == ${sort}">최신순</option>
+										<option value="sales" th:selected="sales == ${sort}">판매량순</option>
+									</select>
+								</div>
+
+								<div class="col-md-3 p0">
+
+
+									<!-- search bar -->
+									<input type="text" class="form-control input_key" id="keyword"
+										name="keyword" th:value="${keyword}" />
+
+									<button class="btn btn_copy copy-text" data-toggle="tooltip"
+										type="button" data-original-title="Search" id="search_button">
+										<i class="fa fa-search" aria-hidden="true"></i>
+									</button>
+								</div>
+
+							</form>
 
 						</div>
 					</div>
@@ -112,14 +138,14 @@
 					<div class="col-md-12 p50">
 						<table>
 							<colgroup>
-								<col width="1000" />
+								<col width="1500" />
 								<col />
 							</colgroup>
 							<tbody id="book_list_box">
 
 								<tr th:each="book :${documents}">
-									<td><span class="imgBook"> <a
-											th:href="${book.thumbnail}" target="_blank"><span></span>
+									<td style="padding-bottom: 15px;"><span class="imgBook">
+											<a th:href="${book.thumbnail}" target="_blank"><span></span>
 												<img th:src="${book.thumbnail}" width="95" height="138"
 												style="float: left; margin-right: 20px" /> </a>
 									</span>
@@ -129,9 +155,11 @@
 												<a th:href="${book.url}" target="_blank"><strong
 													th:text="${book.title}">곰돌이 푸, 행복한 일은 매일 있어</strong></a>
 
-												<button style="border: 0; margin-left: 5px;">
+												<button style="border: 0; margin-left: 5px;"
+													onclick="Book.prototype.clickBookmark($(this));">
 													<i class="fa fa-bookmark-o" aria-hidden="true"></i>
 												</button>
+												<input type="hidden" th:value="${book.isbn}" />
 											</dt>
 											<dd class="info">
 												<div class="view" style="margin-bottom: 5px;">
@@ -146,7 +174,9 @@
 												<div class="view">
 													<span th:text="${book.publisher}">알에이치코리아(RHK)</span> <span
 														class="fc999">펴냄</span> <span class="bar">|</span> <span
-														class="date" th:text="${book.datetime}">2018-03-12</span>
+														class="date"
+														th:text="${#strings.substring(book.datetime,0,10)}">2018-03-12</span>
+
 												</div>
 												<div class="view">
 													카테고리 <span th:text="${book.category}">컴퓨터/IT</span>
@@ -165,14 +195,19 @@
 													매핑까지 핵심 설정 설명하고 쿼리 방식 조회(JPQL...</a>
 											</dd>
 										</dl></td>
-
 								</tr>
+
 
 							</tbody>
 						</table>
 
+						<div class="col-md-12" align="center">
+							<ul id="pagination" class="pagination-sm"></ul>
+						</div>
+
 					</div>
 					<!-- main list end-->
+
 
 				</div>
 			</section>
@@ -186,8 +221,8 @@
 		<!--footer end-->
 	</section>
 
-	<input type="hidden" th:value="${page}" id="page" />
-	<input type="hidden" th:value="${isEnd}" id="isEnd" />
+	<input type="hidden" th:value="${totalPages}" id="totalPages" />
+	<input type="hidden" th:value="${user.idx}" id="userIdx" />
 
 </body>
 </body>
@@ -197,7 +232,33 @@
 <script th:src="@{/design/js/jquery.nicescroll.js}"
 	type="text/javascript"></script>
 <script th:src="@{/design/js/common-scripts.js}"></script>
+<script th:src="@{/design/js/jquery.twbsPagination.min.js}"></script>
+
 <script>
+	var startPage = $("#startPage").val();
+	var totalPage = $("#totalPages").val();
+
+	if (totalPage != "") {
+		$('#pagination').twbsPagination({
+			startPage : startPage,
+			totalPages : totalPage,
+			visiblePages : 10,
+			initiateStartPageClick : false,
+			onPageClick : function(event, page) {
+				var keyword = $('#keyword').val();
+				if (!keyword) {
+					alert("검색하실 책 정보를 입력해주세요.");
+					return false;
+				}
+				var sort = $("#search_sort_select").val();
+				$('#sort').val(sort);
+
+				$("#startPage").val(page);
+				$("#search_form").submit();
+			}
+		});
+	}
+
 	$("body").tooltip({
 		selector : '[data-toggle=tooltip]'
 	});

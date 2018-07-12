@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:redis="http://www.springframework.org/schema/redis"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:c="http://www.springframework.org/schema/c"
+	xsi:schemaLocation="http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/redis http://www.springframework.org/schema/redis/spring-redis-1.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+
+	<bean
+		class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration" />
+
+	<util:properties id="config"
+		location="classpath:config/config.properties" />
+
+	<!-- jedis -->
+	<bean id="jedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+
+		<property name="usePool" value="true"></property>
+		<property name="hostName" value="#{config['master.host']}"></property>
+		<property name="port" value="#{config['master.port']}"></property>
+		<property name="password" value="#{config['master.password']}"></property>
+	</bean>
+
+	<bean id="stringSerializer"
+		class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+
+	<bean id="jsonRedisSerializer"
+		class="org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer"
+		c:type="java.lang.Object"></bean>
+
+	<!-- redis template definition -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
+		p:connection-factory-ref="jedisConnectionFactory">
+		<property name="defaultSerializer" ref="stringSerializer"></property>
+
+		<property name="keySerializer" ref="stringSerializer"></property>
+		<property name="hashKeySerializer" ref="stringSerializer"></property>
+
+		<property name="valueSerializer" ref="stringSerializer"></property>
+		<property name="hashValueSerializer" ref="jsonRedisSerializer"></property>
+	</bean>
+
+	<!-- sentinel -->
+	<bean id="moda-sentinelConfig"
+		class="org.springframework.data.redis.connection.RedisSentinelConfiguration"
+		p:sentinels-ref="sentinels"></bean>
+
+	<util:set id="sentinels">
+		<ref bean="sentinel1" />
+		<ref bean="sentinel2" />
+		<ref bean="sentinel3" />
+	</util:set>
+
+	<bean id="sentinel1" class="org.springframework.data.redis.connection.RedisNode"
+		c:host="#{config['sentinels.host']}" c:port="#{config['sentinels.1.port']}" />
+
+	<bean id="sentinel2" class="org.springframework.data.redis.connection.RedisNode"
+		c:host="#{config['sentinels.host']}" c:port="#{config['sentinels.2.port']}" />
+
+	<bean id="sentinel3" class="org.springframework.data.redis.connection.RedisNode"
+		c:host="#{config['sentinels.host']}" c:port="#{config['sentinels.3.port']}" />
+
+	<!-- cache -->
+	<cache:annotation-driven />
+
+	<bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+		<constructor-arg ref="redisTemplate"></constructor-arg>
+		<property name="defaultExpiration" value="300"></property>
+	</bean>
+
+
+</beans>

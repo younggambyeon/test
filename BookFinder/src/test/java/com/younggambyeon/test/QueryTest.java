@@ -11,13 +11,15 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.younggambyeon.test.dto.Bookmark;
 import com.younggambyeon.test.dto.User;
+import com.younggambyeon.test.model.Document;
 import com.younggambyeon.test.repository.BookmarkRepository;
 import com.younggambyeon.test.repository.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml",
 		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
-		"file:src/main/webapp/WEB-INF/spring/appServlet/security-context.xml" })
+		"file:src/main/webapp/WEB-INF/spring/appServlet/security-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/appServlet/redis-context.xml" })
 
 public class QueryTest {
 
@@ -55,13 +57,11 @@ public class QueryTest {
 
 	public void saveBookmark(User user) {
 		Bookmark bookmarkA = new Bookmark();
-		bookmarkA.setDocument("kakao book API JSON");
 		bookmarkA.setUser(user);
 
 		bookmarkA = bookmarkRepository.save(bookmarkA);
 
 		Bookmark bookmarkB = new Bookmark();
-		bookmarkB.setDocument("kakao book API JSON");
 		bookmarkB.setUser(user);
 
 		bookmarkB = bookmarkRepository.save(bookmarkB);

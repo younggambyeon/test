@@ -22,9 +22,27 @@ public class QBookmark extends EntityPathBase<Bookmark> {
 
     public static final QBookmark bookmark = new QBookmark("bookmark");
 
-    public final StringPath document = createString("document");
+    public final ListPath<String, StringPath> authors = this.<String, StringPath>createList("authors", String.class, StringPath.class, PathInits.DIRECT2);
+
+    public final StringPath category = createString("category");
+
+    public final StringPath contents = createString("contents");
+
+    public final StringPath datetime = createString("datetime");
 
     public final NumberPath<Integer> idx = createNumber("idx", Integer.class);
+
+    public final NumberPath<Integer> price = createNumber("price", Integer.class);
+
+    public final StringPath publisher = createString("publisher");
+
+    public final NumberPath<Integer> sale_price = createNumber("sale_price", Integer.class);
+
+    public final StringPath thumbnail = createString("thumbnail");
+
+    public final StringPath title = createString("title");
+
+    public final StringPath url = createString("url");
 
     public final QUser user;
 

@@ -22,7 +22,8 @@ import com.younggambyeon.test.service.BookFinderService;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml",
 		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
-		"file:src/main/webapp/WEB-INF/spring/appServlet/security-context.xml" })
+		"file:src/main/webapp/WEB-INF/spring/appServlet/security-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/appServlet/redis-context.xml" })
 
 @WebAppConfiguration
 public class APITest {
@@ -44,7 +45,7 @@ public class APITest {
 	public void searchBook() throws JsonParseException, JsonMappingException, IOException {
 		String type = "book";
 
-		ResponseEntity<?> entity = bookFinderService.searchBook(type, "JPA", null, null, 0, 9, -1);
+		ResponseEntity<?> entity = bookFinderService.searchBook(type, "JPA", null, null, 0, 10, -1);
 
 		if (HttpStatus.OK.equals(entity.getStatusCode())) {
 			ObjectMapper mapper = new ObjectMapper();

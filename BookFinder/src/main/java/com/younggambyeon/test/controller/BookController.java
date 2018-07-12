@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,10 +28,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.younggambyeon.test.dto.Bookmark;
+import com.younggambyeon.test.dto.User;
 import com.younggambyeon.test.model.KakaoResponseModel;
 import com.younggambyeon.test.security.CustomUserDetail;
 import com.younggambyeon.test.service.BookFinderService;
+import com.younggambyeon.test.service.BookmarkService;
 import com.younggambyeon.test.service.UserService;
+import com.younggambyeon.test.util.CommonUtil;
 import com.younggambyeon.test.util.CookieUtil;
 
 @Controller
@@ -44,13 +49,16 @@ public class BookController {
 	@Autowired
 	private BookFinderService bookFinderService;
 
+	@Autowired
+	private BookmarkService bookmarkService;
+
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public ModelAndView showHomeView(Authentication auth, ModelAndView mav) {
 		CustomUserDetail detail = (CustomUserDetail) auth.getPrincipal();
-		String email = detail.getUsername();
+		User user = detail.getUser();
 
-		mav.addObject("email", email);
-		mav.addObject("page", 1);
+		mav.addObject("user", user);
+		mav.addObject("startPage", 1);
 
 		mav.setViewName("html/home");
 
@@ -59,27 +67,31 @@ public class BookController {
 
 	@RequestMapping(value = "/book", method = RequestMethod.GET)
 	public ModelAndView searchBook(Authentication auth, HttpServletRequest req, HttpServletResponse resp,
-			ModelAndView mav, @RequestParam String keyword, @RequestParam int page,
-			@RequestParam(defaultValue = "-1") int category)
+			ModelAndView mav, @RequestParam String keyword, @RequestParam(defaultValue = "accuracy") String sort,
+			@RequestParam int page, @RequestParam(defaultValue = "-1") int category)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		int size = 10;
-		page = (page - 1) * size;
 
 		CustomUserDetail detail = (CustomUserDetail) auth.getPrincipal();
+		User user = detail.getUser();
 		ObjectMapper mapper = new ObjectMapper();
-		recordKeywordHistory(keyword, req, resp, mapper);
+		// recordKeywordHistory(keyword, req, resp, mapper);
 
-		ResponseEntity<?> entity = bookFinderService.searchBook("book", keyword, null, null, page, size, category);
+		ResponseEntity<?> entity = bookFinderService.searchBook("book", keyword, sort, null, page, size, category);
 
 		if (HttpStatus.OK.equals(entity.getStatusCode())) {
 			KakaoResponseModel model = mapper.readValue(entity.getBody().toString(), KakaoResponseModel.class);
 
-			mav.addObject("isEnd", model.getMeta().getIs_end());
-			mav.addObject("page", page);
-			mav.addObject("documents", model.getDocuments());
+			int totalPages = CommonUtil.getViewPageNumber(size, model.getMeta().getTotal_count());
+
+			mav.addObject("totalPages", totalPages);
+			mav.addObject("startPage", page);
 			mav.addObject("keyword", keyword);
-			mav.addObject("email", detail.getUsername());
+			mav.addObject("sort", sort);
+
+			mav.addObject("documents", model.getDocuments());
+			mav.addObject("user", user);
 
 			mav.setViewName("html/home");
 
@@ -93,6 +105,33 @@ public class BookController {
 		}
 
 		return mav;
+	}
+
+	@RequestMapping(value = "/user/{idx}/bookmark", method = RequestMethod.GET)
+	public @ResponseBody String saveBookmark(@PathVariable int idx, @RequestParam String isbn) {
+
+		ResponseEntity<?> entity = bookFinderService.searchBook("book", isbn, null, "isbn", 0, 9, -1);
+
+		User user = userService.findUserByIdx(idx);
+		if (user == null) {
+			return "fail";
+		}
+
+		if (HttpStatus.OK.equals(entity.getStatusCode())) {
+
+			Bookmark bookmark = new Bookmark();
+			bookmark.setUser(user);
+
+			bookmarkService.saveBookmark(bookmark);
+
+			return "success";
+
+		} else {
+			logger.error("#Error => Status : " + entity.getStatusCode() + " Header : " + entity.getHeaders()
+					+ " Body : " + entity.getBody());
+			return "fail";
+		}
+
 	}
 
 	@RequestMapping(value = "/book/history", method = RequestMethod.GET)
