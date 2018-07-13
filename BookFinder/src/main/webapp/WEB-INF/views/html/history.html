@@ -62,7 +62,7 @@
 
 		<header class="hd_console">
 			<div class="title_console"></div>
-			<p id="console_name">책 검색</p>
+			<p id="console_name">검색기록</p>
 		</header>
 
 		<!-- sidebar start-->
@@ -71,7 +71,7 @@
 				style="overflow: hidden; outline: none;">
 				<ul class="sidebar-menu" id="nav-accordion">
 
-					<li class="mgt05"><a class="active"> &nbsp;&nbsp;<i
+					<li class="mgt05"><a th:href="@{/home}"> &nbsp;&nbsp;<i
 							class="fa  fa-book" aria-hidden="true"></i><span
 							style="font-size: 13px;">책 검색</span>
 					</a></li>
@@ -79,7 +79,7 @@
 							class="fa fa-bookmark" aria-hidden="true"></i> <span class="fs13">
 								북마크</span>
 					</a></li>
-					<li class="mgt05"><a th:href="@{/history}">&nbsp;&nbsp;<i
+					<li class="mgt05"><a th:href="@{/history}" class="active">&nbsp;&nbsp;<i
 							class="fa fa-history" aria-hidden="true"></i> <span class="fs13">
 								검색기록</span>
 					</a></li>

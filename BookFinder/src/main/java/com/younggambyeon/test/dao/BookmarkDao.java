@@ -11,6 +11,8 @@ public interface BookmarkDao {
 
 	public List<Bookmark> findBookmarkListByUser(User user) throws DataAccessException;
 
+	public List<Bookmark> findBookmarkListByIsbn(String isbn) throws DataAccessException;
+
 	public Bookmark findBookmarkByIdx(int idx) throws DataAccessException;
 
 	public Bookmark saveBookmark(Bookmark bookmark) throws DataAccessException;

@@ -1,15 +1,16 @@
 package com.younggambyeon.test.dto;
 
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity(name = "bookmark")
+@Table(indexes = { @Index(name = "isbn_index", columnList = "isbn", unique = true) })
 public class Bookmark {
 
 	@Id
@@ -20,7 +21,9 @@ public class Bookmark {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	private List<String> authors;
+	private String isbn;
+
+	private String authors;
 
 	private String title;
 	private String contents;
@@ -38,10 +41,11 @@ public class Bookmark {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Bookmark(int idx, User user, List<String> authors, String title, String contents, String url,
+	public Bookmark(int idx, User user, String isbn, String authors, String title, String contents, String url,
 			String datetime, String publisher, String category, String thumbnail, Integer price, Integer sale_price) {
 		this.idx = idx;
 		this.user = user;
+		this.isbn = isbn;
 		this.authors = authors;
 		this.title = title;
 		this.contents = contents;
@@ -70,11 +74,11 @@ public class Bookmark {
 		this.user = user;
 	}
 
-	public List<String> getAuthors() {
+	public String getAuthors() {
 		return authors;
 	}
 
-	public void setAuthors(List<String> authors) {
+	public void setAuthors(String authors) {
 		this.authors = authors;
 	}
 
@@ -148,6 +152,14 @@ public class Bookmark {
 
 	public void setSale_price(Integer sale_price) {
 		this.sale_price = sale_price;
+	}
+
+	public String getIsbn() {
+		return isbn;
+	}
+
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
 
 }

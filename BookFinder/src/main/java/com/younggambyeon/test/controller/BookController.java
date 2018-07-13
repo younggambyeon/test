@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.younggambyeon.test.dto.Bookmark;
 import com.younggambyeon.test.dto.User;
+import com.younggambyeon.test.model.Document;
 import com.younggambyeon.test.model.KakaoResponseModel;
 import com.younggambyeon.test.security.CustomUserDetail;
 import com.younggambyeon.test.service.BookFinderService;
@@ -107,32 +108,94 @@ public class BookController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/user/{idx}/bookmark", method = RequestMethod.GET)
-	public @ResponseBody String saveBookmark(@PathVariable int idx, @RequestParam String isbn) {
+	/* ---- bookmark ---- */
 
-		ResponseEntity<?> entity = bookFinderService.searchBook("book", isbn, null, "isbn", 0, 9, -1);
+	@RequestMapping(value = "/bookmark", method = RequestMethod.GET)
+	public ModelAndView showBookmarkView(Authentication auth, ModelAndView mav) {
+		CustomUserDetail detail = (CustomUserDetail) auth.getPrincipal();
+		User user = detail.getUser();
+
+		List<Bookmark> bookmarkList = bookmarkService.findBookmarkListByUser(user);
+
+		mav.addObject("user", user);
+		mav.addObject("bookmarkList", bookmarkList);
+
+		mav.setViewName("html/bookmark");
+
+		return mav;
+	}
+
+	@RequestMapping(value = "/user/{idx}/bookmark", method = RequestMethod.POST)
+	public @ResponseBody String saveBookmark(@PathVariable int idx, @RequestBody Document doc)
+			throws JsonParseException, JsonMappingException, IOException {
 
 		User user = userService.findUserByIdx(idx);
 		if (user == null) {
 			return "fail";
 		}
 
+		String isbn = CommonUtil.extractBookIsbn(doc.getIsbn());
+		if (0 < bookmarkService.findBookmarkListByIsbn(doc.getIsbn()).size()) {
+			return "duplicate bookmarks";
+		}
+
+		ResponseEntity<?> entity = bookFinderService.searchBook("book", isbn, null, "isbn", 0, 9, -1);
+
 		if (HttpStatus.OK.equals(entity.getStatusCode())) {
+			ObjectMapper mapper = new ObjectMapper();
+			KakaoResponseModel model = mapper.readValue(entity.getBody().toString(), KakaoResponseModel.class);
 
-			Bookmark bookmark = new Bookmark();
-			bookmark.setUser(user);
+			if (0 == model.getDocuments().size()) {
+				return "fail";
+			}
 
-			bookmarkService.saveBookmark(bookmark);
+			bookmarkService.saveBookmark(model, user);
 
 			return "success";
 
 		} else {
 			logger.error("#Error => Status : " + entity.getStatusCode() + " Header : " + entity.getHeaders()
 					+ " Body : " + entity.getBody());
+
+			return "fail";
+		}
+	}
+
+	@RequestMapping(value = "/user/{idx}/bookmark", method = RequestMethod.DELETE)
+	public @ResponseBody String removeBookmark(@PathVariable int idx, @RequestBody Document doc)
+			throws JsonParseException, JsonMappingException, IOException {
+
+		User user = userService.findUserByIdx(idx);
+		if (user == null) {
 			return "fail";
 		}
 
+		List<Bookmark> bookmarks = bookmarkService.findBookmarkListByIsbn(doc.getIsbn());
+		if (0 == bookmarks.size()) {
+			return "fail";
+		}
+
+		Bookmark bookmark = bookmarks.get(0);
+		bookmarkService.deleteBookmark(bookmark);
+
+		return "success";
 	}
+
+	/* ---- bookmark ---- */
+
+	@RequestMapping(value = "/history", method = RequestMethod.GET)
+	public ModelAndView showHistorykView(Authentication auth, ModelAndView mav) {
+		CustomUserDetail detail = (CustomUserDetail) auth.getPrincipal();
+		User user = detail.getUser();
+
+		mav.addObject("user", user);
+
+		mav.setViewName("html/history");
+
+		return mav;
+	}
+
+	/* ---- etc ---- */
 
 	@RequestMapping(value = "/book/history", method = RequestMethod.GET)
 	public @ResponseBody String getHistory(HttpServletRequest req, HttpServletResponse resp)

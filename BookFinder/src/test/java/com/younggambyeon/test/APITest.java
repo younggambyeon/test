@@ -45,7 +45,8 @@ public class APITest {
 	public void searchBook() throws JsonParseException, JsonMappingException, IOException {
 		String type = "book";
 
-		ResponseEntity<?> entity = bookFinderService.searchBook(type, "JPA", null, null, 0, 10, -1);
+		ResponseEntity<?> entity = bookFinderService.searchBook(type, "9788980782901", null,
+				"isbn", 0, 10, -1);
 
 		if (HttpStatus.OK.equals(entity.getStatusCode())) {
 			ObjectMapper mapper = new ObjectMapper();
