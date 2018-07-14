@@ -36,13 +36,13 @@ public class CommonUtil {
 	}
 
 	public static String extractBookIsbn(String isbn) {
-		// 카카오 API => isbn 처음에 공백이 들어간 결과들이 있음.
+		// 카카오 API => isbn 중 처음에 공백이 들어간 결과들이 있음.
 		String str = isbn.substring(0, 1);
 		if (" ".equals(str)) {
 			return isbn.trim();
 		}
 
-		// 카카오 API => "isbn" 예("898078290X 9788980782901") 'x'포함된 isbn은 결과 없음.
+		// 카카오 API => "isbn" 예("898078290X 9788980782901") 'x'포함된 isbn은 결과가 조회 안됨.
 		if (isbn.contains(" ")) {
 			String[] array = isbn.split(" ");
 

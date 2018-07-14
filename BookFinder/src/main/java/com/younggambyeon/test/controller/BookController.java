@@ -1,8 +1,6 @@
 package com.younggambyeon.test.controller;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,20 +22,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.younggambyeon.test.dto.Bookmark;
 import com.younggambyeon.test.dto.User;
 import com.younggambyeon.test.model.Document;
+import com.younggambyeon.test.model.History;
 import com.younggambyeon.test.model.KakaoResponseModel;
 import com.younggambyeon.test.security.CustomUserDetail;
 import com.younggambyeon.test.service.BookFinderService;
 import com.younggambyeon.test.service.BookmarkService;
+import com.younggambyeon.test.service.RedisService;
 import com.younggambyeon.test.service.UserService;
 import com.younggambyeon.test.util.CommonUtil;
-import com.younggambyeon.test.util.CookieUtil;
 
 @Controller
 public class BookController {
@@ -52,6 +49,9 @@ public class BookController {
 
 	@Autowired
 	private BookmarkService bookmarkService;
+
+	@Autowired
+	private RedisService redisService;
 
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public ModelAndView showHomeView(Authentication auth, ModelAndView mav) {
@@ -68,20 +68,24 @@ public class BookController {
 
 	@RequestMapping(value = "/book", method = RequestMethod.GET)
 	public ModelAndView searchBook(Authentication auth, HttpServletRequest req, HttpServletResponse resp,
-			ModelAndView mav, @RequestParam String keyword, @RequestParam(defaultValue = "accuracy") String sort,
+			ModelAndView mav, @RequestParam String keyword, @RequestParam String sort,
 			@RequestParam int page, @RequestParam(defaultValue = "-1") int category)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		int size = 10;
-
 		CustomUserDetail detail = (CustomUserDetail) auth.getPrincipal();
 		User user = detail.getUser();
-		ObjectMapper mapper = new ObjectMapper();
-		// recordKeywordHistory(keyword, req, resp, mapper);
 
 		ResponseEntity<?> entity = bookFinderService.searchBook("book", keyword, sort, null, page, size, category);
 
 		if (HttpStatus.OK.equals(entity.getStatusCode())) {
+			History history = new History();
+			history.setKeyword(keyword);
+			history.setDate(CommonUtil.getCurrentDate("yyyy-MM-dd HH:mm:ss"));
+
+			redisService.addHistory("account:" + user.getIdx() + ":history", history);
+
+			ObjectMapper mapper = new ObjectMapper();
 			KakaoResponseModel model = mapper.readValue(entity.getBody().toString(), KakaoResponseModel.class);
 
 			int totalPages = CommonUtil.getViewPageNumber(size, model.getMeta().getTotal_count());
@@ -181,51 +185,21 @@ public class BookController {
 		return "success";
 	}
 
-	/* ---- bookmark ---- */
+	/* ---- history ---- */
 
 	@RequestMapping(value = "/history", method = RequestMethod.GET)
 	public ModelAndView showHistorykView(Authentication auth, ModelAndView mav) {
 		CustomUserDetail detail = (CustomUserDetail) auth.getPrincipal();
 		User user = detail.getUser();
 
+		List<History> historys = redisService.getHistoryBySortParmeters("account:" + user.getIdx() + ":history", 0, 14);
+
 		mav.addObject("user", user);
+		mav.addObject("historys", historys);
 
 		mav.setViewName("html/history");
 
 		return mav;
-	}
-
-	/* ---- etc ---- */
-
-	@RequestMapping(value = "/book/history", method = RequestMethod.GET)
-	public @ResponseBody String getHistory(HttpServletRequest req, HttpServletResponse resp)
-			throws JsonParseException, JsonMappingException, IOException {
-
-		String cookie = CookieUtil.getCookieValue(req, "search_history");
-
-		if (cookie != null && cookie != "") {
-			return cookie;
-		}
-
-		return "";
-	}
-
-	private void recordKeywordHistory(String keyword, HttpServletRequest req, HttpServletResponse resp,
-			ObjectMapper mapper) throws UnsupportedEncodingException, IOException, JsonParseException,
-			JsonMappingException, JsonProcessingException {
-
-		String cookie = CookieUtil.getCookieValue(req, "search_history");
-
-		List<String> keywordList = new ArrayList<String>();
-		if (cookie != null && cookie != "") {
-			keywordList = mapper.readValue(cookie, new TypeReference<ArrayList<String>>() {
-			});
-		}
-
-		keywordList.add(keyword);
-		cookie = mapper.writeValueAsString(keywordList);
-
-		CookieUtil.setCookieValue(req, resp, "search_history", cookie);
 	}
 
 }

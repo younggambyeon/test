@@ -1,5 +1,7 @@
 package com.younggambyeon.test.service;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +19,7 @@ public class KakaoAPIServiceImpl implements KakaoAPIService {
 	private String kakaoKey;
 
 	@Override
-	public ResponseEntity<?> callAPI(UriComponentsBuilder builder) {
+	public ResponseEntity<?> callAPI(URI uri) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "KakaoAK " + kakaoKey);
 
@@ -25,7 +27,7 @@ public class KakaoAPIServiceImpl implements KakaoAPIService {
 		RestTemplate rest = new RestTemplate();
 
 		try {
-			return rest.exchange(builder.toUriString(), HttpMethod.GET, request, String.class);
+			return rest.exchange(uri, HttpMethod.GET, request, String.class);
 
 		} catch (HttpStatusCodeException e) {
 			return ResponseEntity.status(e.getStatusCode()).headers(e.getResponseHeaders())

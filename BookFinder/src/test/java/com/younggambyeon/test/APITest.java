@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
@@ -30,6 +31,9 @@ public class APITest {
 
 	private static final Logger logger = LoggerFactory.getLogger(APITest.class);
 
+	@Value(value = "#{config['kakao.key']}")
+	private String kakaoKey;
+
 	@Autowired
 	private BookFinderService bookFinderService;
 
@@ -44,9 +48,9 @@ public class APITest {
 	@Test
 	public void searchBook() throws JsonParseException, JsonMappingException, IOException {
 		String type = "book";
+		String keyword = "자바";
 
-		ResponseEntity<?> entity = bookFinderService.searchBook(type, "9788980782901", null,
-				"isbn", 0, 10, -1);
+		ResponseEntity<?> entity = bookFinderService.searchBook(type, keyword, null, null, 0, 10, -1);
 
 		if (HttpStatus.OK.equals(entity.getStatusCode())) {
 			ObjectMapper mapper = new ObjectMapper();

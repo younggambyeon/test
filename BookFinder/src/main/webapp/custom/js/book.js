@@ -2,6 +2,11 @@ var Book = function() {
 
 };
 
+Book.prototype.setSortValue = function() {
+	var sort = $("#search_sort_select").val();
+	$('#sort').val(sort);
+}
+
 Book.prototype.searchBook = function() {
 	var keyword = $('#keyword').val();
 	if (!keyword) {
@@ -9,8 +14,7 @@ Book.prototype.searchBook = function() {
 		return false;
 	}
 
-	var sort = $("#search_sort_select").val();
-	$('#sort').val(sort);
+	Book.prototype.setSortValue();
 	$('#startPage').val(1);
 
 	$("#search_form").submit();

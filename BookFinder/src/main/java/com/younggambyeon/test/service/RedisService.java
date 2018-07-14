@@ -1,22 +1,14 @@
 package com.younggambyeon.test.service;
 
-import java.util.Set;
+import java.util.List;
+
+import com.younggambyeon.test.model.History;
 
 public interface RedisService {
 
-	public Object getValue(String key);
+	public boolean addHistory(String key, History history);
 
-	public void setValue(String key, String value);
-
-	public void addOpsForSetBykeyAndValues(String key, String value);
-
-	public Set<String> getOpsForSetMembers(String key);
-
-	public void deleteBykey(String key);
-
-	public void lpush(String key, String value);
-
-	public String lpop(String key);
+	public List<History> getHistoryBySortParmeters(String key, long start, long end);
 
 	public void setCache(String key, String json);
 

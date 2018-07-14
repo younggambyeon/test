@@ -94,116 +94,25 @@
 		<!--main content start-->
 		<section id="main-content">
 			<section class="wrapper">
-				<div class="row mgb20">
-					<div class="col-md-12 p10 key__wrapper">
-
-						<div class="col-md-12 p0 ">
-
-
-							<form th:action="@{/book}" id="search_form">
-								<input type="hidden" th:value="${startPage}" id="startPage"
-									name="page" /> <input type="hidden" th:value="${sort}"
-									id="sort" name="sort" />
-
-
-
-								<!-- sort -->
-								<div class="col-sm-2">
-									<select class="form-control" id="search_sort_select">
-										<option value="accuracy" th:selected="accuracy == ${sort}">정확도순</option>
-										<option value="recency" th:selected="recency == ${sort}">최신순</option>
-										<option value="sales" th:selected="sales == ${sort}">판매량순</option>
-									</select>
-								</div>
-
-								<div class="col-md-3 p0">
-
-
-									<!-- search bar -->
-									<input type="text" class="form-control input_key" id="keyword"
-										name="keyword" th:value="${keyword}" />
-
-									<button class="btn btn_copy copy-text" data-toggle="tooltip"
-										type="button" data-original-title="Search" id="search_button">
-										<i class="fa fa-search" aria-hidden="true"></i>
-									</button>
-								</div>
-
-							</form>
-
-						</div>
-					</div>
+				<div class="row mgb20" style="margin-top: 50px;">
 
 					<!-- main list start -->
 					<div class="col-md-12 p50">
-						<table>
-							<colgroup>
-								<col width="1500" />
-								<col />
-							</colgroup>
-							<tbody id="book_list_box">
+						<table class="table">
 
-								<tr th:each="book :${documents}">
-									<td style="padding-bottom: 15px;"><span class="imgBook">
-											<a th:href="${book.thumbnail}" target="_blank"><span></span>
-												<img th:src="${book.thumbnail}" width="95" height="138"
-												style="float: left; margin-right: 20px" /> </a>
-									</span>
-
-										<dl class="cont">
-											<dt class="title" style="padding-top: 0">
-												<a th:href="${book.url}" target="_blank"><strong
-													th:text="${book.title}">곰돌이 푸, 행복한 일은 매일 있어</strong></a>
-
-												<button style="border: 0; margin-left: 5px;"
-													onclick="Book.prototype.clickBookmark($(this));">
-													<i class="fa fa-bookmark-o" aria-hidden="true"></i>
-												</button>
-												<input type="hidden" th:value="${book.isbn}" />
-											</dt>
-											<dd class="info">
-												<div class="view" style="margin-bottom: 5px;">
-													<strong> <th:block
-															th:each="author : ${book.authors}">
-															<th:block th:text="${author} ">
-															</th:block>
-														</th:block>
-													</strong>
-
-												</div>
-												<div class="view">
-													<span th:text="${book.publisher}">알에이치코리아(RHK)</span> <span
-														class="fc999">펴냄</span> <span class="bar">|</span> <span
-														class="date"
-														th:text="${#strings.substring(book.datetime,0,10)}">2018-03-12</span>
-
-												</div>
-												<div class="view">
-													카테고리 <span th:text="${book.category}">컴퓨터/IT</span>
-												</div>
-												<div class="view">
-													정가 <span style="text-decoration: line-through;"
-														th:text="${book.price}">12000</span>원 <strong
-														th:text="${book.sale_price}">22500</strong>원
-												</div>
-											</dd>
-											<dd style="margin-top: 5px;">
-												<span class="wrap_book_intro">책소개</span> <a
-													th:href="${book.url}" target="_blank"
-													th:text="${book.contents}">JPA(Java Persistence API)를
-													시작하려는 개발자를 위한 입문서 『JPA 프로그래밍 입문』. 엔티티, 밸류에 대한 기본 매핑부터 콜렉션
-													매핑까지 핵심 설정 설명하고 쿼리 방식 조회(JPQL...</a>
-											</dd>
-										</dl></td>
+							<thead>
+								<tr>
+									<th>키워드</th>
+									<th>검색시간</th>
 								</tr>
-
-
+							</thead>
+							<tbody>
+								<tr th:each="history : ${historys}">
+									<td th:text="${history.keyword}">jpa</td>
+									<td th:text="${history.date}">2018-07-14 16:51:03</td>
+								</tr>
 							</tbody>
 						</table>
-
-						<div class="col-md-12" align="center">
-							<ul id="pagination" class="pagination-sm"></ul>
-						</div>
 
 					</div>
 					<!-- main list end-->
@@ -221,7 +130,6 @@
 		<!--footer end-->
 	</section>
 
-	<input type="hidden" th:value="${totalPages}" id="totalPages" />
 	<input type="hidden" th:value="${user.idx}" id="userIdx" />
 
 </body>

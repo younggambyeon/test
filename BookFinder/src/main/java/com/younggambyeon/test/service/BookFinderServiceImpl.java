@@ -1,5 +1,7 @@
 package com.younggambyeon.test.service;
 
+import java.io.UnsupportedEncodingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,7 @@ public class BookFinderServiceImpl implements BookFinderService {
 
 	@Override
 	public ResponseEntity<?> searchBook(String type, String query, String sort, String target, int page, int size,
-			int category) {
+			int category) throws UnsupportedEncodingException {
 
 		UriComponentsBuilder builder = kakaoAPIService.getUriBuilder(type);
 
@@ -33,9 +35,7 @@ public class BookFinderServiceImpl implements BookFinderService {
 			builder.queryParam("category", category);
 		}
 
-		builder.queryParam("query", query).build().encode();
-
-		return kakaoAPIService.callAPI(builder);
+		return kakaoAPIService.callAPI(builder.queryParam("query", query).build().encode().toUri());
 	}
 
 }
