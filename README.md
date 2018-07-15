@@ -24,8 +24,8 @@ Spring MVC-Security/JPA, MariaDB, Redis, Thymeleaf, HTML, JQuery, javascript 등
 https://downloads.mariadb.org/mariadb/10.3.8/
 MariaDB 10.3 Series - mariadb-10.3.8-winx64.msi
 
-1. 설치 후 "book_finder" 테이블을 생성.
-2. 접근
+1. 설치 -p 3307
+2. 접근 후 "book_finder" 테이블을 생성.
 3. 완료
 
 
