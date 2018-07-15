@@ -13,6 +13,8 @@ Spring MVC-Security/JPA, MariaDB, Redis, Thymeleaf, HTML, JQuery, javascript 등
 # 설치내용 - 테스트 전용
 
 * Maria-DB
+
+
 https://downloads.mariadb.org/mariadb/10.3.8/
 MariaDB 10.3 Series - mariadb-10.3.8-winx64.msi
 
@@ -22,6 +24,8 @@ MariaDB 10.3 Series - mariadb-10.3.8-winx64.msi
 
 
 * Redis
+
+
 https://github.com/MicrosoftArchive/redis/releases
 Redis-x64-3.2.100.msi
 
@@ -55,11 +59,6 @@ OK
 
 
 
-# 설치내용 - 실제
-Redis
-https://redis.io/download
-
-개인적으로 샌티널 연결해서 테스트한 부분이라 기록용입니다.
 
 
 감사합니다.
