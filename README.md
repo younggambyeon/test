@@ -48,7 +48,7 @@ redis-cli -p 6379
 2) ""
 빈 값으로 보일 경우
 
-4. 비밀번호 세팅
+* 비밀번호 세팅
 
 127.0.0.1:6379>config set requirepass foobared
 OK
@@ -59,7 +59,7 @@ OK
 127.0.0.1:6379>auth foobared
 OK
 
-5. 비밀번호 재확인
+* 비밀번호 재확인
 
 127.0.0.1:6379>config get requirepass
 
@@ -69,8 +69,8 @@ OK
 
 
 
-6. 접근
-7. 완료
+4. 접근
+5. 완료
 
 
 안되는 부분이 있다면 younggam.byeon@gmail.com 으로 메일을 보내주세요.
