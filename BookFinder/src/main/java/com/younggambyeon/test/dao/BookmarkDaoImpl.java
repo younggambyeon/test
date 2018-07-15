@@ -22,8 +22,8 @@ public class BookmarkDaoImpl implements BookmarkDao {
 	}
 
 	@Override
-	public List<Bookmark> findBookmarkListByIsbn(String isbn) throws DataAccessException {
-		return bookmarkRepository.findByIsbn(isbn);
+	public Bookmark findBookmarkByUserAndIsbn(User user, String isbn) throws DataAccessException {
+		return bookmarkRepository.findByUserAndIsbn(user, isbn);
 	}
 
 	@Override

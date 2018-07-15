@@ -68,8 +68,8 @@ public class BookController {
 
 	@RequestMapping(value = "/book", method = RequestMethod.GET)
 	public ModelAndView searchBook(Authentication auth, HttpServletRequest req, HttpServletResponse resp,
-			ModelAndView mav, @RequestParam String keyword, @RequestParam String sort,
-			@RequestParam int page, @RequestParam(defaultValue = "-1") int category)
+			ModelAndView mav, @RequestParam String keyword, @RequestParam String sort, @RequestParam int page,
+			@RequestParam(defaultValue = "-1") int category)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		int size = 10;
@@ -94,7 +94,6 @@ public class BookController {
 			mav.addObject("startPage", page);
 			mav.addObject("keyword", keyword);
 			mav.addObject("sort", sort);
-
 			mav.addObject("documents", model.getDocuments());
 			mav.addObject("user", user);
 
@@ -139,7 +138,8 @@ public class BookController {
 		}
 
 		String isbn = CommonUtil.extractBookIsbn(doc.getIsbn());
-		if (0 < bookmarkService.findBookmarkListByIsbn(doc.getIsbn()).size()) {
+		Bookmark bookmark = bookmarkService.findBookmarkByUserAndIsbn(user, doc.getIsbn());
+		if (null != bookmark) {
 			return "duplicate bookmarks";
 		}
 
@@ -174,12 +174,11 @@ public class BookController {
 			return "fail";
 		}
 
-		List<Bookmark> bookmarks = bookmarkService.findBookmarkListByIsbn(doc.getIsbn());
-		if (0 == bookmarks.size()) {
+		Bookmark bookmark = bookmarkService.findBookmarkByUserAndIsbn(user, doc.getIsbn());
+		if (null == bookmark) {
 			return "fail";
 		}
 
-		Bookmark bookmark = bookmarks.get(0);
 		bookmarkService.deleteBookmark(bookmark);
 
 		return "success";

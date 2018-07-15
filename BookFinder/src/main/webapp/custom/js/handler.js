@@ -4,7 +4,7 @@ $(document).ready(function() {
 	var book = new Book();
 
 	/* --- join --- */
-	$('#join_button').click(function() {
+	$("#join_button").click(function() {
 		user.saveUser();
 	});
 

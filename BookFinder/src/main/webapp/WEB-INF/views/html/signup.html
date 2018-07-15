@@ -33,11 +33,19 @@
 </script>
 <script th:src="@{/design/js/bootstrap.min.js}"></script>
 
+<!-- js -->
 <script th:src="@{/custom/js/common.js}" charset="utf-8"></script>
 <script th:src="@{/custom/js/handler.js}" charset="utf-8"></script>
 <script th:src="@{/custom/js/user.js}" charset="utf-8"></script>
 <script th:src="@{/custom/js/book.js}" charset="utf-8"></script>
-<meta id="context-path" th:content="@{/}"/>
+
+<!-- jsbn -->
+<script th:src="@{/custom/jsbnLibrary/rsa.js}" charset="utf-8"></script>
+<script th:src="@{/custom/jsbnLibrary/jsbn.js}" charset="utf-8"></script>
+<script th:src="@{/custom/jsbnLibrary/prng4.js}" charset="utf-8"></script>
+<script th:src="@{/custom/jsbnLibrary/rng.js}" charset="utf-8"></script>
+
+<meta id="context-path" th:content="@{/}" />
 <title>SIGN UP</title>
 </head>
 <body>
@@ -56,6 +64,11 @@
 					<div class="col-md-12 forgot_pw_box--top">
 						<span>SIGN UP</span>
 					</div>
+					
+					<input type="hidden" id="RSAModulus" th:value="${RSAModulus}"/>
+       			    <input type="hidden" id="RSAExponent" th:value="${RSAExponent}"/> 
+
+					
 					<input type="text" id="email" class="input_id form-control"
 						placeholder="your e-mail address" /><br /> <input
 						type="password" id="password" class="input_pw form-control"

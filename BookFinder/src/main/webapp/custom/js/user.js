@@ -6,6 +6,7 @@ User.prototype.saveUser = function() {
 	var contextPath = $("#context-path").attr("content");
 	var email = $('#email').val();
 	var password = $('#password').val();
+
 	var message = $('.forgot_password--message');
 	var box = $("#signup_msg");
 
@@ -23,9 +24,12 @@ User.prototype.saveUser = function() {
 		return false;
 	}
 
+	var rsa = new RSAKey();
+	rsa.setPublic($('#RSAModulus').val(), $('#RSAExponent').val());
+
 	var data = {
-		email : email,
-		password : password
+		email : rsa.encrypt(email),
+		password : rsa.encrypt(password)
 	}
 
 	data = JSON.stringify(data);
@@ -47,5 +51,4 @@ User.prototype.saveUser = function() {
 			document.location.href = contextPath + "login";
 		}
 	});
-
 }

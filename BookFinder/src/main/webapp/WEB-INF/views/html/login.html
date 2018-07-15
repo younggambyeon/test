@@ -32,17 +32,32 @@
 	$.widget.bridge('uibutton', $.ui.button);
 </script>
 <script th:src="@{/design/js/bootstrap.min.js}"></script>
-<meta id="context-path" th:content="@{/}"/>
+
+<!-- js -->
+<script th:src="@{/custom/js/common.js}" charset="utf-8"></script>
+<script th:src="@{/custom/js/handler.js}" charset="utf-8"></script>
+<script th:src="@{/custom/js/user.js}" charset="utf-8"></script>
+<script th:src="@{/custom/js/book.js}" charset="utf-8"></script>
+
+<!-- jsbn -->
+<script th:src="@{/custom/jsbnLibrary/rsa.js}" charset="utf-8"></script>
+<script th:src="@{/custom/jsbnLibrary/jsbn.js}" charset="utf-8"></script>
+<script th:src="@{/custom/jsbnLibrary/prng4.js}" charset="utf-8"></script>
+<script th:src="@{/custom/jsbnLibrary/rng.js}" charset="utf-8"></script>
+
+<meta id="context-path" th:content="@{/}" />
 <title>login</title>
 </head>
 <body>
 	<div id="container"
 		style="height: 100vh; position: relative; background: #5C8EFC;">
 		<form th:action="@{/process}" method="POST">
+
 			<div class="col-md-3 box_login">
 				<div class="login_title">
-					<span class="tada animated block"> <i class="fa fa-smile-o"
-						aria-hidden="true"></i>&nbsp;Welcome
+					<span class="tada animated block"> <span
+						class="forgot_password--message" id="signup_msg"></span> <i
+						class="fa fa-smile-o" aria-hidden="true"></i>&nbsp;Welcome
 					</span>
 				</div>
 

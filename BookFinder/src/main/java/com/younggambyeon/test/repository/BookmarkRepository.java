@@ -9,9 +9,9 @@ import java.lang.String;
 
 public interface BookmarkRepository extends PagingAndSortingRepository<Bookmark, Integer> {
 
-	List<Bookmark> findByIsbn(String isbn);
-
 	public List<Bookmark> findByUser(User user);
+
+	public Bookmark findByUserAndIsbn(User user, String isbn);
 
 	public Bookmark findByIdx(int idx);
 

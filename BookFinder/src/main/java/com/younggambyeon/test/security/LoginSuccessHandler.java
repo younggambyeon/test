@@ -13,9 +13,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication auth)
 			throws IOException, ServletException {
 
-		// CustomUserDetail userDetail = (CustomUserDetail) auth.getPrincipal();
-		// User user = userDetail.getUser();
-
 		String contextPath = request.getContextPath();
 		response.sendRedirect(contextPath + "/home");
 	}

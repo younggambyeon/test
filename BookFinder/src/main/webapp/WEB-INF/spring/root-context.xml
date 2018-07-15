@@ -80,5 +80,6 @@
 	<!-- beans -->
 	<bean id="userService" class="com.younggambyeon.test.service.UserServiceImpl"></bean>
 	<bean id="userDao" class="com.younggambyeon.test.dao.UserDaoImpl"></bean>
+	<bean id="EncryptionService" class="com.younggambyeon.test.service.EncryptionServiceImpl"></bean>
 
 </beans>

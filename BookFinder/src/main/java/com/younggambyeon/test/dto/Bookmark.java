@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity(name = "bookmark")
-@Table(indexes = { @Index(name = "isbn_index", columnList = "isbn", unique = true) })
+@Table(indexes = { @Index(name = "isbn_index", columnList = "isbn") })
 public class Bookmark {
 
 	@Id

@@ -24,6 +24,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
 		try {
 			user = userService.findUserByEmail(id);
+
 		} catch (DataAccessException e) {
 			logger.error("#Error => " + e.getMessage());
 		}
