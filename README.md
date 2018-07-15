@@ -12,7 +12,7 @@ Spring MVC-Security/JPA, MariaDB, Redis, Thymeleaf, HTML, JQuery, javascript 등
 
 # 기능
 회원 가입 및 로그인 관련은 Spring-Security를 사용하였습니다.
-데이터 관련된 서비스는 JPA-Mariadb를 이용하여 구성하였으며, 검색기록은 추후 확장성을 고려하여 Redis로 구성하였습니다.
+데이터 관련된 서비스는 JPA-Mariadb를 이용하여 구성하였으며, 검색기록은 Redis로 구성하였습니다.
 
 
 
