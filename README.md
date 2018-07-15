@@ -39,7 +39,8 @@ Redis-x64-3.2.100.msi
 2. 레디스 접속 후
 redis-cli -p 6379
 
-3. 비번 확인
+3. 비밀번호 확인
+
 127.0.0.1:6379>config get requirepass
 
 결과 :
@@ -47,15 +48,19 @@ redis-cli -p 6379
 2) ""
 빈 값으로 보일 경우
 
-3. 비밀번호 세팅
+4. 비밀번호 세팅
+
 127.0.0.1:6379>config set requirepass foobared
 OK
+
 127.0.0.1:6379>config get requirepass
 (error) NOAUTH Authentication required. 메세지가 나오면
+
 127.0.0.1:6379>auth foobared
 OK
 
-4. 비밀번호 재확인
+5. 비밀번호 재확인
+
 127.0.0.1:6379>config get requirepass
 
 결과 :
@@ -64,9 +69,11 @@ OK
 
 
 
+6. 접근
+7. 완료
 
 
-
+안되는 부분이 있다면 younggam.byeon@gmail.com 으로 메일을 보내주세요.
 
 감사합니다.
 
