@@ -10,10 +10,6 @@ Spring MVC-Security/JPA, MariaDB, Redis, Thymeleaf, HTML, JQuery, javascript 등
 데이터 관련된 서비스는 JPA-Mariadb를 이용하여 구성하였으며, 검색기록은 추후 확장성을 고려하여 Redis로 구성하였습니다.
 
 
-# 아쉬운 점
-UI / 디자인을 하는 일이 많이 서툴러 열심히 찾아서 노력하였으나, 많이 부족하고 아쉽습니다.
-
-
 # 설치내용
 
 Maria-DB
