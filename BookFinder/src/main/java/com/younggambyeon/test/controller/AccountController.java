@@ -1,7 +1,5 @@
 package com.younggambyeon.test.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,8 +12,6 @@ import com.younggambyeon.test.service.UserService;
 
 @Controller
 public class AccountController {
-
-	private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 
 	@Autowired
 	private UserService userService;
@@ -34,6 +30,10 @@ public class AccountController {
 	public @ResponseBody String joinUser(@RequestBody User user) {
 		// 비밀번호 복호화
 		// 이메일, 비밀번호 확인 필요
+		User Userduplication = userService.findUserByEmail(user.getEmail());
+		if (Userduplication != null) {
+			return "duplicate user";
+		}
 
 		userService.saveUser(user);
 

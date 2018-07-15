@@ -3,6 +3,7 @@ var User = function() {
 };
 
 User.prototype.saveUser = function() {
+	var contextPath = $("#context-path").attr("content");
 	var email = $('#email').val();
 	var password = $('#password').val();
 	var message = $('.forgot_password--message');
@@ -30,16 +31,21 @@ User.prototype.saveUser = function() {
 	data = JSON.stringify(data);
 
 	$.ajax({
-		url : '/finder/join',
+		url : contextPath + 'join',
 		type : 'POST',
 		data : data,
 		contentType : 'application/json',
 		dataType : 'text',
 		success : function(response) {
-			document.location.href = "/finder/login";
+			if (response == "duplicate user") {
+				box.text("이미 존재하는 계정입니다.");
+				message.css('visibility', 'visible');
+				message.addClass('bounce animated');
+				return false;
+			}
+
+			document.location.href = contextPath + "login";
 		}
 	});
 
 }
-
-

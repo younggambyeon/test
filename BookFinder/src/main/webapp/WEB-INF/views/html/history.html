@@ -35,14 +35,16 @@
 <script th:src="@{/custom/js/handler.js}" charset="utf-8"></script>
 <script th:src="@{/custom/js/user.js}" charset="utf-8"></script>
 <script th:src="@{/custom/js/book.js}" charset="utf-8"></script>
-<title>home</title>
+
+<meta id="context-path" th:content="@{/}"/>
+<title>history</title>
 </head>
 <body>
 <body>
 	<section id="container">
 		<!-- start header -->
 		<header class="header black-bg">
-			<a class="logo" th:href="@{/console}"><b>BOOK-FINDER</b></a>
+			<a class="logo" th:href="@{/home}"><b>BOOK-FINDER</b></a>
 
 			<div class="top-menu">
 				<ul class="nav pull-right top-menu">

@@ -1,5 +1,4 @@
 var Book = function() {
-
 };
 
 Book.prototype.setSortValue = function() {
@@ -21,6 +20,7 @@ Book.prototype.searchBook = function() {
 };
 
 Book.prototype.clickBookmark = function(bookmark_button) {
+	var contextPath = $("#context-path").attr("content");
 	var name = $("#console_name").text();
 	var i = bookmark_button.children();
 	var dt = bookmark_button.parent();
@@ -35,7 +35,7 @@ Book.prototype.clickBookmark = function(bookmark_button) {
 
 	if (i.hasClass("fa-bookmark-o")) {
 		$.ajax({
-			url : '/finder/user/' + userIdx + '/bookmark',
+			url : contextPath + 'user/' + userIdx + '/bookmark',
 			type : 'POST',
 			data : data,
 			contentType : 'application/json',
@@ -54,7 +54,7 @@ Book.prototype.clickBookmark = function(bookmark_button) {
 
 	} else {
 		$.ajax({
-			url : '/finder/user/' + userIdx + '/bookmark/',
+			url : contextPath + 'user/' + userIdx + '/bookmark/',
 			type : 'DELETE',
 			data : data,
 			contentType : 'application/json',

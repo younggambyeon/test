@@ -29,7 +29,7 @@ import com.younggambyeon.test.service.BookFinderService;
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml",
 		"file:src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml",
 		"file:src/main/webapp/WEB-INF/spring/appServlet/security-context.xml",
-		"file:src/main/webapp/WEB-INF/spring/appServlet/redis-context.xml" })
+		"file:src/main/webapp/WEB-INF/spring/appServlet/redis-test-context.xml" })
 
 public class QueryTest {
 
@@ -50,7 +50,7 @@ public class QueryTest {
 	@Test
 	public void saveUser() throws JsonParseException, JsonMappingException, IOException {
 		User user = new User();
-		user.setEmail("younggam.byeon@gmail.com4");
+		user.setEmail("younggam.byeon@gmail.com");
 		user.setPassword(passwordEncoder.encode("test123"));
 
 		user = userRepository.save(user);

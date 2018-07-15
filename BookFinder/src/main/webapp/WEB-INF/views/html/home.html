@@ -35,6 +35,8 @@
 <script th:src="@{/custom/js/handler.js}" charset="utf-8"></script>
 <script th:src="@{/custom/js/user.js}" charset="utf-8"></script>
 <script th:src="@{/custom/js/book.js}" charset="utf-8"></script>
+
+<meta id="context-path" th:content="@{/}" />
 <title>home</title>
 </head>
 <body>
@@ -42,7 +44,7 @@
 	<section id="container">
 		<!-- start header -->
 		<header class="header black-bg">
-			<a class="logo" th:href="@{/console}"><b>BOOK-FINDER</b></a>
+			<a class="logo" th:href="@{/home}"><b>BOOK-FINDER</b></a>
 
 			<div class="top-menu">
 				<ul class="nav pull-right top-menu">
@@ -238,6 +240,10 @@
 	var startPage = $("#startPage").val();
 	var totalPage = $("#totalPages").val();
 
+	if ($('#pagination').data("twbs-pagination")) {
+		$('#pagination').twbsPagination('destroy');
+	}
+
 	if (totalPage != "") {
 		$('#pagination').twbsPagination({
 			startPage : startPage,
@@ -252,7 +258,6 @@
 				}
 				var sort = $("#search_sort_select").val();
 				$('#sort').val(sort);
-
 				$("#startPage").val(page);
 				$("#search_form").submit();
 			}
