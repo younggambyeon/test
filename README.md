@@ -25,7 +25,7 @@ https://downloads.mariadb.org/mariadb/10.3.8/
 MariaDB 10.3 Series - mariadb-10.3.8-winx64.msi
 
 1. 설치 -p 3307
-2. 접근 후 "book_finder" 테이블을 생성.
+2. 접근 후 "book_finder" 데이터베이스 생성.
 3. 완료
 
 
